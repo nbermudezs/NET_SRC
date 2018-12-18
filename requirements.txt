@@ -1,0 +1,6 @@
+lxml
+bs4
+pandas
+seaborn
+numpy
+matplotlib
