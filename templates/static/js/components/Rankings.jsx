@@ -5,30 +5,34 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import TableFooter from '@material-ui/core/TableFooter';
+import TablePagination from '@material-ui/core/TablePagination';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import TablePaginationActionsWrapped from './Paginator.jsx';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.primary.main,
-    border: 0,
+    borderBottomColor: theme.palette.common.white,
     color: theme.palette.common.white,
+    fontSize: 14,
   },
   body: {
-    fontSize: 14,
+    fontSize: 12,
   },
 }))(TableCell);
 
 const FirstColTableCell = withStyles(theme => ({
   body: {
     backgroundColor: theme.palette.primary.main,
-    border: 1,
     borderColor: theme.palette.primary.main,
     color: theme.palette.common.white,
     fontSize: 14,
+    width: 220
   },
 }))(TableCell);
 
@@ -37,10 +41,14 @@ export default class Rankings extends Component {
     super(props);
     this.state = {
       isLoaded: false,
-      teams: null
+      teams: null,
+      page: 0,
+      rowsPerPage: 5
     }
+    this.handleChangePage = this.handleChangePage.bind(this);
+    this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
   }
-  
+
   componentWillMount() {
     fetch("/ranking.json")
       .then(res => res.json())
@@ -50,10 +58,24 @@ export default class Rankings extends Component {
         })
       });
   }
-  
+
+  handleChangePage(event, page) {
+    this.setState({ page });
+  }
+
+  handleChangeRowsPerPage(event) {
+    this.setState({ rowsPerPage: parseInt(event.target.value) });
+  }
+
   render() {
+    const { rowsPerPage, page } = this.state;
     const teams = this.state.teams || {};
     const teamNames = Object.keys(teams);
+    const rows = teamNames.map(name => {
+      const updated =  teams[name];
+      updated['team'] = name;
+      return updated;
+    })
     return (
       <div>
       <AppBar position="sticky">
@@ -78,19 +100,36 @@ export default class Rankings extends Component {
                     <CustomTableCell align="right">NET RK</CustomTableCell>
                   </TableRow>
                 </TableHead>
-                
+
                 <TableBody>
-                  {teamNames.map(team => {
-                    return <TableRow key={team.replace(' ', '_')}>
-                      <FirstColTableCell>{team}</FirstColTableCell>
-                      <CustomTableCell align="right">{teams[team]['Sagarin_RK']}</CustomTableCell>
-                      <CustomTableCell align="right">{teams[team]['Pomeroy_RK']}</CustomTableCell>
-                      <CustomTableCell align="right">{teams[team]['RPI']}</CustomTableCell>
-                      <CustomTableCell align="right">{teams[team]['BPI_RK']}</CustomTableCell>
-                      <CustomTableCell align="right">{teams[team]['NET Rank']}</CustomTableCell>
+                  {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
+                    return <TableRow key={row['team'].replace(' ', '_')}>
+                      <FirstColTableCell>{row['team']}</FirstColTableCell>
+                      <CustomTableCell align="right">{row['Sagarin_RK']}</CustomTableCell>
+                      <CustomTableCell align="right">{row['Pomeroy_RK']}</CustomTableCell>
+                      <CustomTableCell align="right">{row['RPI']}</CustomTableCell>
+                      <CustomTableCell align="right">{row['BPI_RK']}</CustomTableCell>
+                      <CustomTableCell align="right">{row['NET Rank']}</CustomTableCell>
                     </TableRow>
                   })}
                 </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TablePagination
+                      rowsPerPageOptions={[5, 10, 25]}
+                      colSpan={3}
+                      count={rows.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      SelectProps={{
+                        native: true,
+                      }}
+                      onChangePage={this.handleChangePage}
+                      onChangeRowsPerPage={this.handleChangeRowsPerPage}
+                      ActionsComponent={TablePaginationActionsWrapped}
+                    />
+                  </TableRow>
+                </TableFooter>
               </Table>
             </Paper>
           </Grid>

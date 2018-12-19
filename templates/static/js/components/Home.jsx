@@ -14,11 +14,12 @@ import Typography from '@material-ui/core/Typography';
 const CustomTableCell = withStyles(theme => ({
   head: {
     backgroundColor: theme.palette.primary.main,
-    border: 0,
+    borderColor: theme.palette.common.white,
     color: theme.palette.common.white,
+    fontSize: 14
   },
   body: {
-    fontSize: 14,
+    fontSize: 12,
   },
 }))(TableCell);
 
@@ -41,7 +42,7 @@ export default class Home extends Component {
       teams: null
     }
   }
-  
+
   componentWillMount() {
      fetch("/correlation.json")
       .then(res => res.json())
@@ -51,7 +52,7 @@ export default class Home extends Component {
           items: res
         })
       });
-      
+
     fetch("/ranking.json")
       .then(res => res.json())
       .then(res => {
@@ -60,7 +61,7 @@ export default class Home extends Component {
         })
       });
   }
-  
+
   render() {
     const items = this.state.items;
     const teams = this.state.teams || {};
@@ -101,7 +102,7 @@ export default class Home extends Component {
                     <CustomTableCell align="right">{items['Sagarin_RK']['BPI_RK']}</CustomTableCell>
                     <CustomTableCell align="right">{items['Sagarin_RK']['NET Rank']}</CustomTableCell>
                   </TableRow>
-                  
+
                   <TableRow>
                     <FirstColTableCell>Pomeroy RK</FirstColTableCell>
                     <CustomTableCell align="right">{items['Pomeroy_RK']['Sagarin_RK']}</CustomTableCell>
@@ -110,7 +111,7 @@ export default class Home extends Component {
                     <CustomTableCell align="right">{items['Pomeroy_RK']['BPI_RK']}</CustomTableCell>
                     <CustomTableCell align="right">{items['Pomeroy_RK']['NET Rank']}</CustomTableCell>
                   </TableRow>
-                  
+
                   <TableRow>
                     <FirstColTableCell>RPI RK</FirstColTableCell>
                     <CustomTableCell align="right">{items['RPI']['Sagarin_RK']}</CustomTableCell>
@@ -119,7 +120,7 @@ export default class Home extends Component {
                     <CustomTableCell align="right">{items['RPI']['BPI_RK']}</CustomTableCell>
                     <CustomTableCell align="right">{items['RPI']['NET Rank']}</CustomTableCell>
                   </TableRow>
-                  
+
                   <TableRow>
                     <FirstColTableCell>BPI RK</FirstColTableCell>
                     <CustomTableCell align="right">{items['BPI_RK']['Sagarin_RK']}</CustomTableCell>
@@ -128,7 +129,7 @@ export default class Home extends Component {
                     <CustomTableCell align="right">{items['BPI_RK']['BPI_RK']}</CustomTableCell>
                     <CustomTableCell align="right">{items['BPI_RK']['NET Rank']}</CustomTableCell>
                   </TableRow>
-                  
+
                   <TableRow>
                     <FirstColTableCell>NET RK</FirstColTableCell>
                     <CustomTableCell align="right">{items['NET Rank']['Sagarin_RK']}</CustomTableCell>
