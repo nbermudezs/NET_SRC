@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 DATE=`date +%Y-%m-%d`
 curl -o correlation.png https://net-src.herokuapp.com/correlation.png
 curl -o correlation.csv https://net-src.herokuapp.com/correlation.csv
