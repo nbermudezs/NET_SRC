@@ -224,7 +224,7 @@ def collect_from_warren_nolan():
 def collection_from_espn():
     results = []
     header = ['Year', 'BPI_RK', 'Team', 'BPI']
-    href = espn_base_url.format(YEAR, 0)
+    href = espn_base_url.format(YEAR, 1)
     print(href)
     soup = BeautifulSoup(urlopen(href), 'lxml')
     li = soup.find('ul', class_='pagination').find_all('li')
@@ -232,8 +232,8 @@ def collection_from_espn():
         # last one is the next button
         pages = int(li[-2].get_text())
     else:
-        pages = 0
-    for page in range(pages + 1):
+        pages = 1
+    for page in range(1, pages + 1):
         href = espn_base_url.format(YEAR, page)
         soup = BeautifulSoup(urlopen(href), 'lxml')
         table = soup.find('table', class_='bpi__table')
