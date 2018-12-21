@@ -283,8 +283,12 @@ def collect_from_sagarin():
             name = re.search('[A-Z][^=]*', str(school)).group(0).strip()
             raw_name = name.replace('&amp;', '&')
             name = cleanup_team_name(raw_name)
+            # import pdb; pdb.set_trace()
             rk = school.get_text().replace('&nbsp', '').replace(raw_name, '').replace('=', '').strip()
             results.append([YEAR, rk, name])
+            if len(results) == 353:
+                # this is the number of teams in 2018-2019 season
+                break
     df = pd.DataFrame.from_records(results, columns=header)
     return df.set_index('Team').drop_duplicates()
 
