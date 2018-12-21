@@ -61,7 +61,7 @@ def correlation_json():
 	if rankings is None or (date.today() - last_updated).days > 0:
 		rankings = collect_rankings()
 		last_updated = date.today()
-	result = rankings.corr(method='spearman').to_json(si, orient='index')
+	result = rankings.corr(method='spearman').round(3).to_json(si, orient='index')
 
 	output = make_response(si.getvalue())
 	output.headers["Content-Type"] = "application/json"
