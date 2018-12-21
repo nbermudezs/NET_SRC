@@ -233,15 +233,21 @@ def collection_from_espn():
         pages = int(li[-2].get_text())
     else:
         pages = 1
-    for page in range(1, pages + 1):
-        href = espn_base_url.format(YEAR, page)
-        soup = BeautifulSoup(urlopen(href), 'lxml')
-        table = soup.find('table', class_='bpi__table')
-        for row in table.find('tbody').find_all('tr'):
-            rk = row.find_all('td')[0].get_text()
-            team = cleanup_team_name(row.find_all('td')[1].find('span', class_='team-names').get_text())
-            bpi = row.find_all('td')[6].get_text()
-            results.append([YEAR, rk, team, bpi])
+
+    teams = set()
+    while len(teams) != 353:
+        for page in range(1, pages + 1):
+            href = espn_base_url.format(YEAR, page)
+            soup = BeautifulSoup(urlopen(href), 'lxml')
+            table = soup.find('table', class_='bpi__table')
+            for row in table.find('tbody').find_all('tr'):
+                rk = row.find_all('td')[0].get_text()
+                team = cleanup_team_name(row.find_all('td')[1].find('span', class_='team-names').get_text())
+                if team in teams:
+                    continue
+                teams.add(team)
+                bpi = row.find_all('td')[6].get_text()
+                results.append([YEAR, rk, team, bpi])
     df = pd.DataFrame.from_records(results, columns=header)
     return df.set_index('Team').drop_duplicates()
 
@@ -294,14 +300,16 @@ def collect_from_sagarin():
 
 
 def collect_rankings():
+    import numpy as np
     sagarin_data = collect_from_sagarin()
-    print(sagarin_data.shape)
+    print(sagarin_data.shape, np.unique(sagarin_data.index).shape)
     pomeroy_data = collect_from_pomeroy()
-    print(pomeroy_data.shape)
+    print(pomeroy_data.shape, np.unique(pomeroy_data.index).shape)
     bpi_data = collection_from_espn()
-    print(bpi_data.shape)
+    print(set(sagarin_data.index) - set(bpi_data.index))
+    print(bpi_data.shape, np.unique(bpi_data.index).shape)
     net_rpi_data = collect_from_warren_nolan()
-    print(net_rpi_data.shape)
+    print(net_rpi_data.shape, np.unique(net_rpi_data.index).shape)
 
     all_df = pd.concat([sagarin_data, pomeroy_data, bpi_data, net_rpi_data], axis=1)
     all_df = all_df[['Year', 'Sagarin_RK', 'Pomeroy_RK', 'BPI_RK', 'RPI', 'NET Rank']]
