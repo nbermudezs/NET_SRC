@@ -236,7 +236,9 @@ def collection_from_espn():
 
     teams = set()
     while len(teams) != 353:
+        print(len(teams))
         for page in range(1, pages + 1):
+            print('page: ', page)
             href = espn_base_url.format(YEAR, page)
             soup = BeautifulSoup(urlopen(href), 'lxml')
             table = soup.find('table', class_='bpi__table')
