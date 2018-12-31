@@ -96,7 +96,7 @@ export default class Home extends Component {
                 <TableBody>
                   <TableRow>
                     <FirstColTableCell>Sagarin RK</FirstColTableCell>
-                    <CustomTableCell align="right">{items['Sagarin_RK']['Sagarin_RK']}</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
                     <CustomTableCell align="right">{items['Sagarin_RK']['Pomeroy_RK']}</CustomTableCell>
                     <CustomTableCell align="right">{items['Sagarin_RK']['RPI']}</CustomTableCell>
                     <CustomTableCell align="right">{items['Sagarin_RK']['BPI_RK']}</CustomTableCell>
@@ -105,8 +105,8 @@ export default class Home extends Component {
 
                   <TableRow>
                     <FirstColTableCell>Pomeroy RK</FirstColTableCell>
-                    <CustomTableCell align="right">{items['Pomeroy_RK']['Sagarin_RK']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['Pomeroy_RK']['Pomeroy_RK']}</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
                     <CustomTableCell align="right">{items['Pomeroy_RK']['RPI']}</CustomTableCell>
                     <CustomTableCell align="right">{items['Pomeroy_RK']['BPI_RK']}</CustomTableCell>
                     <CustomTableCell align="right">{items['Pomeroy_RK']['NET Rank']}</CustomTableCell>
@@ -114,29 +114,20 @@ export default class Home extends Component {
 
                   <TableRow>
                     <FirstColTableCell>RPI RK</FirstColTableCell>
-                    <CustomTableCell align="right">{items['RPI']['Sagarin_RK']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['RPI']['Pomeroy_RK']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['RPI']['RPI']}</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
                     <CustomTableCell align="right">{items['RPI']['BPI_RK']}</CustomTableCell>
                     <CustomTableCell align="right">{items['RPI']['NET Rank']}</CustomTableCell>
                   </TableRow>
 
                   <TableRow>
                     <FirstColTableCell>BPI RK</FirstColTableCell>
-                    <CustomTableCell align="right">{items['BPI_RK']['Sagarin_RK']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['BPI_RK']['Pomeroy_RK']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['BPI_RK']['RPI']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['BPI_RK']['BPI_RK']}</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
+                    <CustomTableCell align="right">—</CustomTableCell>
                     <CustomTableCell align="right">{items['BPI_RK']['NET Rank']}</CustomTableCell>
-                  </TableRow>
-
-                  <TableRow>
-                    <FirstColTableCell>NET RK</FirstColTableCell>
-                    <CustomTableCell align="right">{items['NET Rank']['Sagarin_RK']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['NET Rank']['Pomeroy_RK']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['NET Rank']['RPI']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['NET Rank']['BPI_RK']}</CustomTableCell>
-                    <CustomTableCell align="right">{items['NET Rank']['NET Rank']}</CustomTableCell>
                   </TableRow>
                 </TableBody>
               </Table>
