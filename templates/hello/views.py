@@ -103,3 +103,35 @@ def correlation_csv():
 	output.headers["Content-Type"] = "text/csv"
 	output.cache_control.max_age = 60 * 60 * 24
 	return output
+
+
+@hello_blueprint.route('/correlation.txt')
+def correlation_txt():
+	global rankings, last_updated
+	with open('templates/output/as_html.txt') as f:
+		template = f.read()
+
+	if rankings is None or (date.today() - last_updated).days > 0:
+		rankings = collect_rankings()
+		last_updated = date.today()
+
+	corr = rankings.corr(method='spearman')
+	payload = template.format(
+		date=date.today().strftime('%d %B %Y'),
+		sagarinVpomeroy=corr['Sagarin_RK']['Pomeroy_RK'].round(3),
+		sagarinVrpi=corr['Sagarin_RK']['RPI'].round(3),
+		sagarinVbpi=corr['Sagarin_RK']['BPI_RK'].round(3),
+		sagarinVnet=corr['Sagarin_RK']['NET Rank'].round(3),
+		pomeroyVrpi=corr['Pomeroy_RK']['RPI'].round(3),
+		pomeroyVbpi=corr['Pomeroy_RK']['BPI_RK'].round(3),
+		pomeroyVnet=corr['Pomeroy_RK']['NET Rank'].round(3),
+		rpiVbpi=corr['RPI']['BPI_RK'].round(3),
+		rpiVnet=corr['RPI']['NET Rank'].round(3),
+		bpiVnet=corr['BPI_RK']['NET Rank'].round(3)
+	)
+
+	output = make_response(payload)
+	output.headers["Content-Disposition"] = "attachment; filename=corr.txt"
+	output.headers["Content-Type"] = "text/plain; charset=utf-8"
+	output.cache_control.max_age = 60 * 60 * 24
+	return output
