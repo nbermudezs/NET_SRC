@@ -1,48 +1,40 @@
 <h3 align="center">Analysis (as of {date})</h3>
 <div align="center">
 <table width="675px">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Sagarin</th>
-            <th>Ken Pomeroy</th>
-            <th>RPI</th>
-            <th>BPI</th>
-            <th>NET</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Sagarin</td>
-            <td>—</td>
-            <td>{sagarinVpomeroy}</td>
-            <td>{sagarinVrpi}</td>
-            <td>{sagarinVbpi}</td>
-            <td>{sagarinVnet}</td>
-        </tr>
-        <tr>
-            <td>Ken Pomeroy</td>
-            <td>—</td>
-            <td>—</td>
-            <td>{pomeroyVrpi}</td>
-            <td>{pomeroyVbpi}</td>
-            <td>{pomeroyVnet}</td>
-        </tr>
-        <tr>RPI</td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-            <td>{rpiVbpi}</td>
-            <td>{rpiVnet}</td>
-        </tr>
-        <tr>
-            <td>BPI</td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-            <td>—</td>
-            <td>{bpiVnet}</td>
-        </tr>
-    </tbody>
+    <tr>
+        <th></th>
+        <th>Ken Pomeroy</th>
+        <th>BPI</th>
+        <th>RPI</th>
+        <th>NET</th>
+    </tr>
+    <tr>
+        <td>Sagarin</td>
+        <td>{sagarinVpomeroy}</td>
+        <td>{sagarinVbpi}</td>
+        <td>{sagarinVrpi}</td>
+        <td>{sagarinVnet}</td>
+    </tr>
+    <tr>
+        <td>Ken Pomeroy</td>
+        <td>-</td>
+        <td>{pomeroyVbpi}</td>
+        <td>{pomeroyVrpi}</td>
+        <td>{pomeroyVnet}</td>
+    </tr>
+    <tr>
+        <td>BPI</td>
+        <td>-</td>
+        <td>-</td>
+        <td>{rpiVbpi}</td>
+        <td>{bpiVnet}</td>
+    </tr>
+    <tr>
+        <td>RPI</td>
+        <td>-</td>
+        <td>-</td>
+        <td>-</td>
+        <td>{rpiVnet}</td>
+    </tr>
 </table>
 </div>
