@@ -140,3 +140,17 @@ def correlation_txt():
 	output.headers["Content-Type"] = "text/plain; charset=utf-8"
 	output.cache_control.max_age = 60 * 60 * 24
 	return output
+
+
+@hello_blueprint.route('/outliers.json')
+def outliers_json():
+	global rankings, last_updated
+
+	analyzer = Analyzer()
+	if rankings is None or (date.today() - last_updated).days > 0:
+		rankings = collect_rankings()
+		last_updated = date.today()
+
+	corr = rankings.corr(method='spearman')
+	outliers = analyzer.get_outliers(rankings, corr)
+	return jsonify(outliers)
