@@ -79,7 +79,14 @@ def correlation_png():
 	if rankings is None or (date.today() - last_updated).days > 0:
 		rankings = collect_rankings()
 		last_updated = date.today()
-	fig = sns.pairplot(rankings, vars=['Sagarin_RK', 'Pomeroy_RK', 'BPI_RK', 'RPI', 'NET Rank'])
+	rankings['Sagarin'] = rankings['Sagarin_RK']
+	rankings['KenPom'] = rankings['Pomeroy_RK']
+	rankings['BPI'] = rankings['BPI_RK']
+	rankings['NET'] = rankings['NET Rank']
+
+	fig = sns.pairplot(rankings,
+					   y_vars=['KenPom', 'BPI', 'RPI', 'NET'],
+					   x_vars=['Sagarin', 'KenPom', 'BPI', 'RPI'])
 	fig.set(ylim=(0, 380), xlim=(0, 380))
 	for i, j in zip(*np.triu_indices_from(fig.axes, 1)):
 		fig.axes[i, j].set_visible(False)
