@@ -4,10 +4,12 @@ import csv
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
 from datetime import date
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from flask import render_template, Blueprint, make_response, send_file
+from flask import render_template, Blueprint, make_response, send_file, jsonify
+from utils.analyzer import Analyzer
 
 hello_blueprint = Blueprint('hello',__name__)
 
@@ -78,6 +80,9 @@ def correlation_png():
 		rankings = collect_rankings()
 		last_updated = date.today()
 	fig = sns.pairplot(rankings, vars=['Sagarin_RK', 'Pomeroy_RK', 'BPI_RK', 'RPI', 'NET Rank'])
+	fig.set(ylim=(0, 380), xlim=(0, 380))
+	for i, j in zip(*np.triu_indices_from(fig.axes, 1)):
+		fig.axes[i, j].set_visible(False)
 	FigureCanvas(fig.fig).print_png(img)
 
 	output = make_response(img.getvalue())
