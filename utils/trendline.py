@@ -38,19 +38,31 @@ if __name__ == '__main__':
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
+    import seaborn as sns
     import sys
+
+    plt.style.use('seaborn-white')
+    plt.rcParams['font.family'] = 'sans-serif'
+    plt.rcParams['figure.dpi'] = 300
 
     if len(sys.argv) > 1:
         root = sys.argv[1]
     else:
         root = 'tmp'
 
-    start_date = dt.date.today() - dt.timedelta(days=14)
+    start_date = dt.date(year=2018, month=12, day=20)
     result = NET_vs_all_over_time(start_date, root=root)
-    result.T.plot.line()
-    plt.ylabel('SRC coefficient with NET rank')
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter(DATE_FORMAT))
-    plt.gca().xaxis.set_major_locator(mdates.DayLocator())
+
+    fig = plt.subplot()
+    result.T.plot(kind='line', y='Sagarin_RK', marker='+', label='Sagarin', ax=fig)
+    result.T.plot(kind='line', y='Pomeroy_RK', marker='^', label='KenPom', ax=fig)
+    result.T.plot(kind='line', y='BPI_RK', marker='o', label='BPI', ax=fig)
+    result.T.plot(kind='line', y='RPI', marker='*', label='RPI', ax=fig)
+    plt.ylabel('SRC coefficient w.r.t. NET')
+
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
+    plt.gca().xaxis.set_major_locator(mdates.WeekdayLocator())
+    plt.legend(fancybox=True)
     plt.savefig(root + '/trend_{}_to_{}'.format(
         start_date.strftime(DATE_FORMAT),
         dt.date.today().strftime(DATE_FORMAT)))
