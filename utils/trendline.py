@@ -41,6 +41,8 @@ if __name__ == '__main__':
     import seaborn as sns
     import sys
 
+    sns.set_palette('dark')
+
     plt.style.use('seaborn-white')
     plt.rcParams['font.family'] = 'sans-serif'
     plt.rcParams['figure.dpi'] = 300
