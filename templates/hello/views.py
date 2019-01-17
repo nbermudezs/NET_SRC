@@ -11,6 +11,8 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from flask import render_template, Blueprint, make_response, send_file, jsonify
 from utils.analyzer import Analyzer
 
+plt.rcParams['figure.dpi'] = 300
+
 hello_blueprint = Blueprint('hello',__name__)
 
 from templates.hello.collect_data import collect_rankings
