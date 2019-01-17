@@ -88,7 +88,9 @@ def correlation_png():
 
 	fig = sns.pairplot(rankings,
 					   y_vars=['KenPom', 'BPI', 'RPI', 'NET'],
-					   x_vars=['Sagarin', 'KenPom', 'BPI', 'RPI'])
+					   x_vars=['Sagarin', 'KenPom', 'BPI', 'RPI'],
+					   kind='reg',
+					   plot_kws={'color': 'black'})
 	fig.set(ylim=(0, 380), xlim=(0, 380))
 	for i, j in zip(*np.triu_indices_from(fig.axes, 1)):
 		fig.axes[i, j].set_visible(False)
