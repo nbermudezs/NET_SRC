@@ -5,6 +5,26 @@ __email__ = "nab6@illinois.edu"
 __status__ = "Development"
 
 
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.linear_model import LinearRegression
+
+
+sns.set_palette('dark')
+plt.style.use("seaborn-white")
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['figure.dpi'] = 250
+
+
+labels_map = {
+    'Sagarin_RK': 'Sagarin',
+    'Pomeroy_RK': 'KenPom',
+    'BPI_RK': 'BPI',
+    'RPI': 'RPI',
+    'NET Rank': 'NET'
+}
+
+
 class Analyzer:
     def get_outliers(self, rankings, correlation):
         columns = rankings.columns
@@ -26,3 +46,70 @@ class Analyzer:
                         columns[j]: int(rankings[columns[j]].loc[outlier])
                     }
         return results
+
+    def get_mean_diff(self, rankings):
+        columns = rankings.columns
+
+        results = {}
+        for i in range(len(columns)):
+            for j in range(i + 1, len(columns)):
+                label = '{} vs {}'.format(columns[i], columns[j])
+                diff = rankings[columns[i]] - rankings[columns[j]]
+                diff = diff.abs()
+
+                results[label] = {
+                    'mean': diff.values.mean(),
+                    'std': diff.values.std(ddof=1)
+                }
+        return results
+
+
+    def save_diff_histograms(self, rankings, output):
+        columns = rankings.columns
+
+        for i in range(len(columns)):
+            for j in range(i + 1, len(columns)):
+                label = '{} vs {}'.format(labels_map[columns[i]],
+                                          labels_map[columns[j]])
+                diff = rankings[columns[i]] - rankings[columns[j]]
+                diff = diff.abs()
+
+                diff.groupby(diff).count().plot.line()#.hist(bins=20)
+                plt.title(label)
+                plt.xlabel('Rank difference')
+                plt.ylabel('Count')
+                plt.savefig(output + '/' + label + '.png')
+                # plt.show()
+
+    def slopes(self, rankings):
+        columns = rankings.columns
+
+        for i in range(len(columns)):
+            for j in range(i + 1, len(columns)):
+                label = '{} vs {}'.format(labels_map[columns[i]],
+                                          labels_map[columns[j]])
+                model = LinearRegression()
+                model.fit(rankings[columns[i]].values.reshape(-1, 1),
+                          rankings[columns[j]].values.reshape(-1, 1))
+                slope = model.coef_[0]
+                print(label, slope, model.intercept_)
+
+
+if __name__ == '__main__':
+    import pandas as pd
+    import sys
+    from pprint import pprint
+
+    rankings = pd.read_csv(sys.argv[1], index_col=0)
+    analyzer = Analyzer()
+
+    print(rankings.corr(method='spearman'))
+
+    print('======= LR SLOPES ========')
+    analyzer.slopes(rankings)
+
+    diff = analyzer.get_mean_diff(rankings)
+    print('======= AVG DIFF =======')
+    pprint(diff)
+
+    analyzer.save_diff_histograms(rankings, None)
