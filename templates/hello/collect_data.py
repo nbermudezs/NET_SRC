@@ -162,6 +162,7 @@ name_map = {
     'Southern California': 'USC',
     'Southeast Missouri State': 'Southeast Missouri',
     'Southeast Missouri St.': 'Southeast Missouri',
+    'SE Missouri St': 'Southeast Missouri',
     'SE Louisiana': 'Southeastern Louisiana',
     'Stony Brook-NY': 'Stony Brook',
     "St. John's": "Saint John's",
