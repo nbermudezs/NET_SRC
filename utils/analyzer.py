@@ -58,8 +58,8 @@ class Analyzer:
                 diff = diff.abs()
 
                 results[label] = {
-                    'mean': diff.values.mean(),
-                    'std': diff.values.std(ddof=1)
+                    'mean': diff.values.mean().round(2),
+                    'std': diff.values.std(ddof=1).round(2)
                 }
         return results
 
@@ -74,11 +74,13 @@ class Analyzer:
                 diff = rankings[columns[i]] - rankings[columns[j]]
                 diff = diff.abs()
 
-                diff.groupby(diff).count().plot.line()#.hist(bins=20)
+                diff.groupby(diff).count().hist(bins=20, color='black')
                 plt.title(label)
                 plt.xlabel('Rank difference')
-                plt.ylabel('Count')
-                plt.savefig(output + '/' + label + '.png')
+                plt.ylabel('# of teams')
+                plt.savefig(output + '/diff-hist-' + label.replace(' ', '_') + '.png')
+                plt.cla()
+                plt.clf()
                 # plt.show()
 
     def slopes(self, rankings):
@@ -112,4 +114,4 @@ if __name__ == '__main__':
     print('======= AVG DIFF =======')
     pprint(diff)
 
-    analyzer.save_diff_histograms(rankings, None)
+    analyzer.save_diff_histograms(rankings, '~/cron/net_src')
