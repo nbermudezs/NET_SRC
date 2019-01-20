@@ -56,10 +56,10 @@ if __name__ == '__main__':
     result = NET_vs_all_over_time(start_date, root=root)
 
     fig = plt.subplot()
-    result.T.plot(kind='line', y='Sagarin_RK', marker='+', label='Sagarin', ax=fig)
-    result.T.plot(kind='line', y='Pomeroy_RK', marker='^', label='KenPom', ax=fig)
-    result.T.plot(kind='line', y='BPI_RK', marker='o', label='BPI', ax=fig)
-    result.T.plot(kind='line', y='RPI', marker='*', label='RPI', ax=fig)
+    result.T.plot(kind='line', y='Sagarin_RK', color='black', marker='+', label='Sagarin', ax=fig)
+    result.T.plot(kind='line', y='Pomeroy_RK', color='black', marker='^', label='KenPom', ax=fig)
+    result.T.plot(kind='line', y='BPI_RK', color='black', marker='o', label='BPI', ax=fig)
+    result.T.plot(kind='line', y='RPI', color='black', marker='*', label='RPI', ax=fig)
     plt.ylabel('SRC coefficient w.r.t. NET')
 
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%b %d'))
