@@ -22,7 +22,7 @@ def send(root):
     to_email = Email(os.environ.get('SENDGRID_TO'))
 
     mail = Mail(from_email, subject, to_email)
-    files = ['correlation_{}.txt', 'correlation_{}.csv', 'rankings_{}.csv', 'correlation_{}.png']
+    files = ['correlation_{}.txt', 'correlation_{}.csv', 'rankings_{}.csv', 'correlation_{}.png', 'outliers_{}.json']
     for file in files:
         filename = file.format(date.today().strftime('%Y-%m-%d'))
         with open(root + '/' + filename, 'rb') as f:
