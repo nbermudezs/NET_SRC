@@ -73,12 +73,13 @@ def data_csv():
 	if rankings is None or (date.today() - last_updated).days > 0:
 		rankings = collect_rankings()
 		last_updated = date.today()
-	tmp_rankings = prepare_rankings(rankings)
-	tmp_rankings.to_csv(si)
 
 	conf = request.args.get('conf', '')
 	if conf == 'REPLACE_ME':
 		return 'Please replace REPLACE_ME with a valid conference name'
+	
+	tmp_rankings = prepare_rankings(rankings)
+	tmp_rankings.to_csv(si)
 
 	output = make_response(si.getvalue())
 	output.headers["Content-Disposition"] = "attachment; filename=rankings_{}.csv".format(request.args.get('conf', ''))
@@ -203,13 +204,13 @@ def correlation_csv():
 		rankings = collect_rankings()
 		last_updated = date.today()
 
-	tmp_rankings = prepare_rankings(rankings)
-	tmp_rankings = tmp_rankings.drop(['RPI - NET', 'Conf'], axis=1)
-	tmp_rankings.corr(method='spearman').to_csv(si)
-
 	conf = request.args.get('conf', '')
 	if conf == 'REPLACE_ME':
 		return 'Please replace REPLACE_ME with a valid conference name'
+
+	tmp_rankings = prepare_rankings(rankings)
+	tmp_rankings = tmp_rankings.drop(['RPI - NET', 'Conf'], axis=1)
+	tmp_rankings.corr(method='spearman').to_csv(si)
 
 	output = make_response(si.getvalue())
 	output.headers["Content-Disposition"] = "attachment; filename=correlation_{}.csv".format(request.args.get('conf', ''))
