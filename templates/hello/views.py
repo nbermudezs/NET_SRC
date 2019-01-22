@@ -76,8 +76,12 @@ def data_csv():
 	tmp_rankings = prepare_rankings(rankings)
 	tmp_rankings.to_csv(si)
 
+	conf = request.args.get('conf', '')
+	if conf == 'REPLACE_ME':
+		return 'Please replace REPLACE_ME with a valid conference name'
+
 	output = make_response(si.getvalue())
-	output.headers["Content-Disposition"] = "attachment; filename=rankings.csv"
+	output.headers["Content-Disposition"] = "attachment; filename=rankings_{}.csv".format(request.args.get('conf', ''))
 	output.headers["Content-Type"] = "text/csv"
 	output.cache_control.max_age = 60 * 60 * 24
 	return output
@@ -202,6 +206,10 @@ def correlation_csv():
 	tmp_rankings = prepare_rankings(rankings)
 	tmp_rankings = tmp_rankings.drop(['RPI - NET', 'Conf'], axis=1)
 	tmp_rankings.corr(method='spearman').to_csv(si)
+
+	conf = request.args.get('conf', '')
+	if conf == 'REPLACE_ME':
+		return 'Please replace REPLACE_ME with a valid conference name'
 
 	output = make_response(si.getvalue())
 	output.headers["Content-Disposition"] = "attachment; filename=correlation_{}.csv".format(request.args.get('conf', ''))

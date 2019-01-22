@@ -26,12 +26,12 @@ def send(root):
         'correlation_{}.txt',
         'correlation_{}.csv',
         'rankings_{}.csv',
-        'correlation_{}.png',
         'correlation_PowerSeven_{}.csv',
         'correlation_Others_{}.csv',
         'outliers_{}.json',
         'rankings_PowerSeven_{}.csv',
-        'rankings_Others_{}.csv'
+        'rankings_Others_{}.csv',
+        'correlation_{}.png',
     ]
     for file in files:
         filename = file.format(date.today().strftime('%Y-%m-%d'))
