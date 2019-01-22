@@ -317,6 +317,8 @@ def collect_rankings():
     all_df = pd.concat([sagarin_data, pomeroy_data, bpi_data, net_rpi_data], axis=1)
     all_df = all_df[['Year', 'Sagarin_RK', 'Pomeroy_RK', 'BPI_RK', 'RPI', 'NET Rank']]
     all_df = all_df.drop('Year', axis=1).astype(int)
+    all_df['RPI - NET'] = all_df['RPI'] - all_df['NET Rank']
+    all_df = all_df.sort_values(by='RPI - NET', ascending=True)
 
     return all_df
 

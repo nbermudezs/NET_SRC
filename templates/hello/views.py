@@ -65,7 +65,9 @@ def correlation_json():
 	if rankings is None or (date.today() - last_updated).days > 0:
 		rankings = collect_rankings()
 		last_updated = date.today()
-	result = rankings.corr(method='spearman').round(3).to_json(si, orient='index')
+
+	tmp_rankings = rankings.drop('RPI - NET', axis=1)
+	result = tmp_rankings.corr(method='spearman').round(3).to_json(si, orient='index')
 
 	output = make_response(si.getvalue())
 	output.headers["Content-Type"] = "application/json"
@@ -101,6 +103,8 @@ def correlation_png():
 	output.headers["Content-Type"] = "image/png"
 	output.cache_control.max_age = 60 * 60 * 24
 
+	rankings = rankings.drop(['Sagarin', 'KenPom', 'BPI', 'NET'], axis=1)
+
 	return output
 
 
@@ -112,7 +116,8 @@ def correlation_csv():
 		rankings = collect_rankings()
 		last_updated = date.today()
 
-	rankings.corr(method='spearman').to_csv(si)
+	tmp_rankings = rankings.drop('RPI - NET', axis=1)
+	tmp_rankings.corr(method='spearman').to_csv(si)
 
 	output = make_response(si.getvalue())
 	output.headers["Content-Disposition"] = "attachment; filename=corr.csv"
@@ -131,7 +136,8 @@ def correlation_txt():
 		rankings = collect_rankings()
 		last_updated = date.today()
 
-	corr = rankings.corr(method='spearman')
+	tmp_rankings = rankings.drop('RPI - NET', axis=1)
+	corr = tmp_rankings.corr(method='spearman')
 	payload = template.format(
 		date=date.today().strftime('%d %B %Y'),
 		sagarinVpomeroy=corr['Sagarin_RK']['Pomeroy_RK'].round(3),
@@ -162,6 +168,7 @@ def outliers_json():
 		rankings = collect_rankings()
 		last_updated = date.today()
 
-	corr = rankings.corr(method='spearman')
+	tmp_rankings = rankings.drop('RPI - NET', axis=1)
+	corr = tmp_rankings.corr(method='spearman')
 	outliers = analyzer.get_outliers(rankings, corr)
 	return jsonify(outliers)
