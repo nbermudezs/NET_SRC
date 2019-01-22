@@ -12,7 +12,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from flask import render_template, Blueprint, make_response, send_file, jsonify, request
 from utils.analyzer import Analyzer
 
-plt.rcParams['figure.dpi'] = 300
+plt.rcParams['figure.dpi'] = 200
 
 hello_blueprint = Blueprint('hello',__name__)
 
@@ -204,7 +204,7 @@ def correlation_csv():
 	tmp_rankings.corr(method='spearman').to_csv(si)
 
 	output = make_response(si.getvalue())
-	output.headers["Content-Disposition"] = "attachment; filename=corr.csv"
+	output.headers["Content-Disposition"] = "attachment; filename=correlation_{}.csv".format(request.args.get('conf', ''))
 	output.headers["Content-Type"] = "text/csv"
 	output.cache_control.max_age = 60 * 60 * 24
 	return output
