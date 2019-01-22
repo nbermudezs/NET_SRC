@@ -224,7 +224,7 @@ def collect_from_warren_nolan():
 
 def collection_from_espn():
     results = []
-    header = ['Year', 'BPI_RK', 'Team', 'BPI']
+    header = ['Year', 'BPI_RK', 'Team', 'BPI', 'Conf']
     href = espn_base_url.format(YEAR, 1)
     print(href)
     soup = BeautifulSoup(urlopen(href), 'lxml')
@@ -246,11 +246,12 @@ def collection_from_espn():
             for row in table.find('tbody').find_all('tr'):
                 rk = row.find_all('td')[0].get_text()
                 team = cleanup_team_name(row.find_all('td')[1].find('span', class_='team-names').get_text())
+                conf = row.find_all('td')[2].get_text()
                 if team in teams:
                     continue
                 teams.add(team)
                 bpi = row.find_all('td')[6].get_text()
-                results.append([YEAR, rk, team, bpi])
+                results.append([YEAR, rk, team, bpi, conf])
     df = pd.DataFrame.from_records(results, columns=header)
     return df.set_index('Team').drop_duplicates()
 
@@ -315,8 +316,15 @@ def collect_rankings():
     print(net_rpi_data.shape, np.unique(net_rpi_data.index).shape)
 
     all_df = pd.concat([sagarin_data, pomeroy_data, bpi_data, net_rpi_data], axis=1)
-    all_df = all_df[['Year', 'Sagarin_RK', 'Pomeroy_RK', 'BPI_RK', 'RPI', 'NET Rank']]
-    all_df = all_df.drop('Year', axis=1).astype(int)
+    all_df = all_df[['Year', 'Sagarin_RK', 'Pomeroy_RK', 'BPI_RK', 'RPI', 'NET Rank', 'Conf']]
+    all_df = all_df.drop('Year', axis=1).astype({
+        'Sagarin_RK': int,
+        'Pomeroy_RK': int,
+        'BPI_RK': int,
+        'RPI': int,
+        'NET Rank': int,
+        'Conf': str
+    })
     all_df['RPI - NET'] = all_df['RPI'] - all_df['NET Rank']
     all_df = all_df.sort_values(by='RPI - NET', ascending=True)
 
