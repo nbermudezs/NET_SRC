@@ -47,7 +47,8 @@ class Analyzer:
                     }
         return results
 
-    def get_mean_diff(self, rankings):
+    @staticmethod
+    def get_mean_diff(rankings, abs=True):
         columns = rankings.columns
 
         results = {}
@@ -55,7 +56,8 @@ class Analyzer:
             for j in range(i + 1, len(columns)):
                 label = '{} vs {}'.format(columns[i], columns[j])
                 diff = rankings[columns[i]] - rankings[columns[j]]
-                diff = diff.abs()
+                if abs:
+                    diff = diff.abs()
 
                 results[label] = {
                     'mean': diff.values.mean().round(2),
@@ -63,8 +65,8 @@ class Analyzer:
                 }
         return results
 
-
-    def save_diff_histograms(self, rankings, output):
+    @staticmethod
+    def save_diff_histograms(rankings, output, abs=True):
         columns = rankings.columns
 
         for i in range(len(columns)):
@@ -72,18 +74,26 @@ class Analyzer:
                 label = '{} vs {}'.format(labels_map[columns[i]],
                                           labels_map[columns[j]])
                 diff = rankings[columns[i]] - rankings[columns[j]]
-                diff = diff.abs()
+                if abs:
+                    diff = diff.abs()
 
-                diff.groupby(diff).count().hist(bins=20, color='black')
+                sns.distplot(diff.values, kde=False, hist_kws=dict(alpha=1., color='black'))
                 plt.title(label)
+                if abs:
+                    plt.xlim(0)
+                else:
+                    plt.xlim(diff.min())
                 plt.xlabel('Rank difference')
                 plt.ylabel('# of teams')
-                plt.savefig(output + '/diff-hist-' + label.replace(' ', '_') + '.png')
+                if abs:
+                    plt.savefig(output + '/abs-diff-hist-' + label.replace(' ', '_') + '.png')
+                else:
+                    plt.savefig(output + '/diff-hist-' + label.replace(' ', '_') + '.png')
                 plt.cla()
                 plt.clf()
-                # plt.show()
 
-    def slopes(self, rankings):
+    @staticmethod
+    def slopes(rankings):
         columns = rankings.columns
 
         for i in range(len(columns)):
@@ -102,16 +112,20 @@ if __name__ == '__main__':
     import sys
     from pprint import pprint
 
-    rankings = pd.read_csv(sys.argv[1], index_col=0)
-    analyzer = Analyzer()
+    rankings = pd.read_csv(sys.argv[1], index_col=0, usecols=['Sagarin_RK', 'Pomeroy_RK', 'BPI_RK', 'RPI', 'NET Rank'])
 
     print(rankings.corr(method='spearman'))
 
     print('======= LR SLOPES ========')
-    analyzer.slopes(rankings)
+    Analyzer.slopes(rankings)
 
-    diff = analyzer.get_mean_diff(rankings)
+    diff = Analyzer.get_mean_diff(rankings)
+    print('======= AVG ABS DIFF =======')
+    pprint(diff)
+
+    diff = Analyzer.get_mean_diff(rankings, abs=False)
     print('======= AVG DIFF =======')
     pprint(diff)
 
-    analyzer.save_diff_histograms(rankings, '~/cron/net_src')
+    Analyzer.save_diff_histograms(rankings, 'tmp')
+    Analyzer.save_diff_histograms(rankings, 'tmp', abs=False)
