@@ -31,6 +31,7 @@ def send(root):
         'outliers_{}.json',
         'rankings_PowerSeven_{}.csv',
         'rankings_Others_{}.csv',
+        'net-v-all.png',
         'correlation_{}.png',
     ]
     for file in files:

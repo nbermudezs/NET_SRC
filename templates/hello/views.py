@@ -140,6 +140,36 @@ def correlation_png():
 	return output
 
 
+@hello_blueprint.route('/net-v-all.png')
+def net_v_all_png():
+	global rankings, last_updated
+	img = io.BytesIO()
+	if rankings is None or (date.today() - last_updated).days > 0:
+		rankings = collect_rankings()
+		last_updated = date.today()
+
+	tmp_rankings = prepare_rankings(rankings)
+
+	tmp_rankings['Sagarin'] = tmp_rankings['Sagarin_RK']
+	tmp_rankings['KenPom'] = tmp_rankings['Pomeroy_RK']
+	tmp_rankings['BPI'] = tmp_rankings['BPI_RK']
+	tmp_rankings['NET'] = tmp_rankings['NET Rank']
+
+	fig = sns.pairplot(tmp_rankings,
+					   y_vars=['NET'],
+					   x_vars=['Sagarin', 'KenPom', 'BPI', 'RPI'],
+					   plot_kws={'color': 'black'})
+	fig.set(ylim=(0, 380), xlim=(0, 380))
+	FigureCanvas(fig.fig).print_png(img)
+
+	output = make_response(img.getvalue())
+	output.headers["Content-Disposition"] = "inline"
+	output.headers["Content-Type"] = "image/png"
+	output.cache_control.max_age = 60 * 60 * 24
+
+	return output
+
+
 @hello_blueprint.route('/correlationByConf.png')
 def correlation_by_conf_png():
 	global rankings, last_updated

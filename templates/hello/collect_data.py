@@ -249,6 +249,7 @@ def collection_from_espn():
                 conf = row.find_all('td')[2].get_text()
                 if team in teams:
                     continue
+                print(team, len(teams))
                 teams.add(team)
                 bpi = row.find_all('td')[6].get_text()
                 results.append([YEAR, rk, team, bpi, conf])

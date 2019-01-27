@@ -11,6 +11,7 @@ curl -o rankings.csv https://net-src.herokuapp.com/ranking.csv
 curl -o rankings_PowerSeven_${DATE}.csv https://net-src.herokuapp.com/ranking.csv?conf=PowerSeven
 curl -o rankings_Others_${DATE}.csv https://net-src.herokuapp.com/ranking.csv?conf=Others
 curl -o outliers.json https://net-src.herokuapp.com/outliers.json
+curl -o net-v-all.png https://net-src.herokuapp.com/net-v-all.png
 
 curl -o correlationByConf_A_${DATE}.png https://net-src.herokuapp.com/correlationByConf.png?n=8
 curl -o correlationByConf_B_${DATE}.png https://net-src.herokuapp.com/correlation.png?n=2

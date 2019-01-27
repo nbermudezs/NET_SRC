@@ -37,4 +37,6 @@
         <td>{rpiVnet}</td>
     </tr>
 </table>
+
+<img src="net-v-all.png" width="675px" />
 </div>
