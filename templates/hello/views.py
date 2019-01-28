@@ -262,6 +262,22 @@ def correlation_txt():
 	tmp_rankings = prepare_rankings(rankings)
 	tmp_rankings = tmp_rankings.drop(['RPI - NET', 'Conf'], axis=1)
 	corr = tmp_rankings.corr(method='spearman')
+
+	img = io.BytesIO()
+
+	tmp_rankings['Sagarin'] = tmp_rankings['Sagarin_RK']
+	tmp_rankings['KenPom'] = tmp_rankings['Pomeroy_RK']
+	tmp_rankings['BPI'] = tmp_rankings['BPI_RK']
+	tmp_rankings['NET'] = tmp_rankings['NET Rank']
+	fig = sns.pairplot(tmp_rankings,
+					   y_vars=['NET'],
+					   x_vars=['Sagarin', 'KenPom', 'BPI', 'RPI'],
+					   plot_kws={'color': 'black'})
+	fig.set(ylim=(0, 380), xlim=(0, 380))
+	plt.savefig(img, format='png')
+	img.seek(0)
+	imageBase64 = base64.encodebytes(img.getvalue()).decode()
+
 	payload = template.format(
 		date=date.today().strftime('%d %B %Y'),
 		sagarinVpomeroy=corr['Sagarin_RK']['Pomeroy_RK'].round(3),
@@ -273,7 +289,8 @@ def correlation_txt():
 		pomeroyVnet=corr['Pomeroy_RK']['NET Rank'].round(3),
 		rpiVbpi=corr['RPI']['BPI_RK'].round(3),
 		rpiVnet=corr['RPI']['NET Rank'].round(3),
-		bpiVnet=corr['BPI_RK']['NET Rank'].round(3)
+		bpiVnet=corr['BPI_RK']['NET Rank'].round(3),
+		imageBase64=imageBase64
 	)
 
 	output = make_response(payload)

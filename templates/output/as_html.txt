@@ -38,5 +38,5 @@
     </tr>
 </table>
 
-<img src="net-v-all.png" width="675px" />
+<img src="data:image/png;base64, {imageBase64}" width="675px" />
 </div>
