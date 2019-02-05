@@ -1,3 +1,6 @@
+<h3 align="center">Plots NET vs KenPom, Sagarin, RPI (as of {date})</h3>
+<img src="data:image/png;base64, {imageBase64}" width="675px" />
+
 <h3 align="center">Analysis (as of {date})</h3>
 <div align="center">
 <table width="675px">
@@ -37,6 +40,4 @@
         <td>{rpiVnet}</td>
     </tr>
 </table>
-
-<img src="data:image/png;base64, {imageBase64}" width="675px" />
 </div>
