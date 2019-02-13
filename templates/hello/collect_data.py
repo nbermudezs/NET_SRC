@@ -9,11 +9,13 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import re
 import seaborn as sns
+import os
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 
 
-YEAR = 2019
+YEAR = int(os.environ.get('YEAR', '2019'))
+N_TEAMS = int(os.environ.get('N_TEAMS', '353'))
 
 
 # template:
@@ -236,7 +238,7 @@ def collection_from_espn():
         pages = 1
 
     teams = set()
-    while len(teams) != 353:
+    while len(teams) != N_TEAMS:
         print(len(teams))
         for page in range(1, pages + 1):
             print('page: ', page)
@@ -297,7 +299,7 @@ def collect_from_sagarin():
             # import pdb; pdb.set_trace()
             rk = school.get_text().replace('&nbsp', '').replace(raw_name, '').replace('=', '').strip()
             results.append([YEAR, rk, name])
-            if len(results) == 353:
+            if len(results) == N_TEAMS:
                 # this is the number of teams in 2018-2019 season
                 break
     df = pd.DataFrame.from_records(results, columns=header)
