@@ -26,6 +26,7 @@ warren_nolan_base_url = 'http://warrennolan.com/basketball/{}/{}'
 # template
 # pos 0: year
 espn_base_url = 'http://www.espn.com/mens-college-basketball/bpi/_/view/bpi/season/{}/page/{}'
+espn_group_url = 'http://www.espn.com/mens-college-basketball/bpi/_/season/{}/view/bpi/group/{}'
 
 # template
 # pos 0: year
@@ -294,20 +295,19 @@ def collection_from_espn():
     href = espn_base_url.format(YEAR, 1)
     print(href)
     soup = BeautifulSoup(urlopen(href), 'lxml')
-    li = soup.find('ul', class_='pagination').find_all('li')
-    if len(li) > 0:
-        # last one is the next button
-        pages = int(li[-2].get_text())
-    else:
-        pages = 1
+    li = soup.find('ul', class_='tour').find_all('li')
+    groups = [l.find('a').get('data-group') for l in li]
 
     teams = set()
     while len(teams) != N_TEAMS:
         print(len(teams))
-        for page in range(1, pages + 1):
-            print('page: ', page)
-            href = espn_base_url.format(YEAR, page)
+        for idx, group in enumerate(groups):
+            href = espn_group_url.format(YEAR, group)
             soup = BeautifulSoup(urlopen(href), 'lxml')
+            if idx == 1:
+                print('Last updated ', soup.find('span', class_='bpi__updateTime').get('data-date'))
+                print('=' * 80)
+            print('group: ', group)
             table = soup.find('table', class_='bpi__table')
             for row in table.find('tbody').find_all('tr'):
                 rk = row.find_all('td')[0].get_text()
