@@ -306,7 +306,8 @@ def collection_from_espn():
         print(len(teams))
         for page in range(1, pages + 1):
             href = espn_base_url.format(YEAR, page)
-            soup = BeautifulSoup(urlopen(href), 'lxml')
+            req = Request(href, headers={'Cache-Control': 'no-cache'})
+            soup = BeautifulSoup(urlopen(req), 'lxml')
             if page == 1:
                 print('Last updated ', soup.find('span', class_='bpi__updateTime').get('data-date'))
                 print('=' * 80)
@@ -322,6 +323,7 @@ def collection_from_espn():
                 teams.add(team)
                 bpi = row.find_all('td')[6].get_text()
                 results.append([YEAR, rk, team, bpi, conf])
+            del soup
     df = pd.DataFrame.from_records(results, columns=header)
     return df.set_index('Team').drop_duplicates()
 
