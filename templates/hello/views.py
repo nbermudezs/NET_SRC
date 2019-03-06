@@ -77,8 +77,13 @@ def data_csv():
 	conf = request.args.get('conf', '')
 	if conf == 'REPLACE_ME':
 		return 'Please replace REPLACE_ME with a valid conference name'
-	
+
 	tmp_rankings = prepare_rankings(rankings)
+	sort = request.args.get('sort', '')
+	if sort == 'KPvNET':
+		tmp_rankings['KP - NET'] = tmp_rankings['Pomeroy_RK'] - tmp_rankings['NET Rank']
+		tmp_rankings = tmp_rankings.drop('RPI - NET', axis=1)
+		tmp_rankings = tmp_rankings.sort_values(by='KP - NET', ascending=True)
 	tmp_rankings.to_csv(si)
 
 	output = make_response(si.getvalue())

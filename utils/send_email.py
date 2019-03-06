@@ -28,9 +28,12 @@ def send(root):
         'rankings_{}.csv',
         'correlation_PowerSeven_{}.csv',
         'correlation_Others_{}.csv',
-        'outliers_{}.json',
         'rankings_PowerSeven_{}.csv',
         'rankings_Others_{}.csv',
+        'KPvNET_rankings_PowerSeven_{}.csv',
+        'KPvNET_rankings_Others_{}.csv',
+        'KPvNET_rankings_{}.csv',
+        'outliers_{}.json',
         'net-v-all.png',
         'correlation_{}.png',
     ]
