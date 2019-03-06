@@ -19,7 +19,7 @@ curl -o ${DATA_HOME}/correlation_${DATE}.txt https://net-src.herokuapp.com/corre
 curl -o ${DATA_HOME}/rankings_${DATE}.csv https://net-src.herokuapp.com/ranking.csv
 curl -o ${DATA_HOME}/rankings_PowerSeven_${DATE}.csv https://net-src.herokuapp.com/ranking.csv?conf=PowerSeven
 curl -o ${DATA_HOME}/rankings_Others_${DATE}.csv https://net-src.herokuapp.com/ranking.csv?conf=Others
-curl -o ${DATA_HOME}/KPvNET_rankings_${DATE}.csv https://net-src.herokuapp.com/ranking.csv&sort=KPvNET
+curl -o ${DATA_HOME}/KPvNET_rankings_${DATE}.csv https://net-src.herokuapp.com/ranking.csv?sort=KPvNET
 curl -o ${DATA_HOME}/KPvNET_rankings_PowerSeven_${DATE}.csv https://net-src.herokuapp.com/ranking.csv?conf=PowerSeven&sort=KPvNET
 curl -o ${DATA_HOME}/KPvNET_rankings_Others_${DATE}.csv https://net-src.herokuapp.com/ranking.csv?conf=Others&sort=KPvNET
 curl -o ${DATA_HOME}/outliers_${DATE}.json https://net-src.herokuapp.com/outliers.json
