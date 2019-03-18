@@ -237,6 +237,7 @@ name_map = {
 def cleanup_team_name(name):
     if ' St.' in name:
         name = name.replace(' St.', ' State')
+    name = re.sub(' [0-9]+', '', name)
     if name in name_map:
         return name_map[name]
     return name
