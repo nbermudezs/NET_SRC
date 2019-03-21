@@ -98,6 +98,7 @@ name_map = {
     'CSUN': 'Cal State Northridge',
     'Delaware St.': 'Delaware State',
     'Detroit Mercy': 'Detroit',
+    'Depaul': 'DePaul',
     'East Tennessee St.': 'East Tennessee State',
     'East Tennessee State(ETS': 'East Tennessee State',
     'Eastern Ky.': 'Eastern Kentucky',
@@ -266,6 +267,50 @@ def warren_nolan_html_to_df(year, metric, cols, col_offset=0):
     return df[cols].set_index('Team')
 
 
+def win_loss_records(year):
+    metric = 'rpi-live'
+    col_offset = 2
+    results = []
+    header = None
+    href = warren_nolan_base_url.format(year, metric)
+    print(href)
+    soup = BeautifulSoup(urlopen(href), 'lxml')
+    table = soup.find('div', class_='datatable').find('table')
+    for row in table.find_all('tr'):
+        if row.find('th'):
+            if len(results) == 0:
+                header = ['Year'] + [
+                    x.get_text().replace('\n', '').strip()
+                    for i, x in enumerate(row.find_all('th'))
+                    if i >= col_offset]
+            continue
+        data = [col.get_text() for i, col in enumerate(row.find_all('td')) if
+                i >= col_offset]
+        data = cleanup_warren_nolan_data(data)
+        results.append([str(year)] + data)
+
+    df = pd.DataFrame.from_records(results, columns=header)
+    data = []
+    for _, row in df.iterrows():
+        data.append({
+            'Team': row['Team'],
+            'W': row['Record'].split('-')[0],
+            'L': row['Record'].split('-')[1],
+            'Q1-W': row['Q1'].split('-')[0],
+            'Q1-L': row['Q1'].split('-')[1],
+            'Q2-W': row['Q2'].split('-')[0],
+            'Q2-L': row['Q2'].split('-')[1],
+            'Q3-W': row['Q3'].split('-')[0],
+            'Q3-L': row['Q3'].split('-')[1],
+            'Q4-W': row['Q4'].split('-')[0],
+            'Q4-L': row['Q4'].split('-')[1],
+            'SOS': row['SOS'],
+            'RPI': row['RPI']
+        })
+    df = pd.DataFrame.from_records(data, columns=list(data[0].keys()))
+    return df.set_index('Team')
+
+
 def collect_net(year):
     req = Request(ncaa_base_url, headers={'User-Agent': 'Mozilla/5.0'})
     results = []
@@ -407,6 +452,11 @@ def collect_rankings():
 
 
 if __name__ == '__main__':
+    win_loss = win_loss_records(2019)
+    pom = collect_from_pomeroy()
+    net = collect_net(2019)
+    pd.concat([win_loss, pom, net], axis=1).drop('Year', axis=1).to_csv('shouvik_dt_data.csv')
+    exit(0)
     all_df = collect_rankings()
     print(all_df.corr(method='spearman'))
     sns.pairplot(all_df,
