@@ -132,6 +132,7 @@ name_map = {
     'Louisiana Monroe': 'ULM',
     'Loyola Chicago': 'Loyola-Chicago',
     'Loyola Marymount': 'Loyola-Marymount',
+    'LMU (CA)': 'Loyola-Marymount',
     'Loyola MD': 'Loyola-Maryland',
     'Loyola (MD)': 'Loyola-Maryland',
     'Loyola Maryland': 'Loyola-Maryland',
