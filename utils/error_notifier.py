@@ -8,7 +8,12 @@ __status__ = "Development"
 import os
 import pandas as pd
 import sendgrid
-import urllib.request as urllib
+import sys
+
+if sys.version_info[0] < 3:
+    import urllib
+else:
+    import urllib.request as urllib
 from datetime import date
 from sendgrid.helpers.mail import *
 
@@ -25,13 +30,13 @@ def can_read(filepath):
     return True
 
 
-def send_error_email():
+def send_error_email_v3():
     sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
 
     from_email = Email(os.environ.get('SENDGRID_FROM'))
     subject = 'Error in SRC coefficients calculation - {}'.format(date.today().strftime('%Y-%m-%d'))
     to_email = Email(os.environ.get('SENDGRID_TO_DEVELOPER'))
-    content = Content('text/plain', 'There was an error in today\' correlation analysis. Please have a look.')
+    content = Content('text/plain', 'There was an error in today\'s correlation analysis. Please have a look.')
     mail = Mail(from_email, subject, to_email, content)
 
     data = mail.get()
@@ -42,9 +47,31 @@ def send_error_email():
         exit()
 
 
+def send_error_email():
+    sg = sendgrid.SendGridAPIClient(os.environ.get('SENDGRID_API_KEY'))
+
+    subject = 'Error in SRC coefficients calculation - {}'.format(date.today().strftime('%Y-%m-%d'))
+    mail = Mail(
+        from_email=os.environ.get('SENDGRID_FROM'),
+        subject=subject,
+        to_emails=os.environ.get('SENDGRID_TO_DEVELOPER'),
+        html_content='There was an error in today\'s correlation analysis. Please have a look.')
+    sender = sg.send
+
+    try:
+        response = sender(mail)
+    except Exception as e:
+        import pdb; pdb.set_trace()
+        print(e.read())
+        exit()
+
+
 if __name__ == '__main__':
     import sys
     filepath = sys.argv[1]
 
     if not can_read(filepath):
-        send_error_email()
+        if sys.version_info[0] < 3:
+            send_error_email()
+        else:
+            send_error_email_v3()
