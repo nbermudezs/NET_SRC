@@ -218,6 +218,7 @@ name_map = {
     'Texas A&M Corpus Chris': 'Texas A&M-Corpus Christi',
     'Texas A&M-CC': 'Texas A&M-Corpus Christi',
     'UConn': 'Connecticut',
+    'UIW': 'Incarnate Word',
     'UL Monroe': 'ULM',
     'UMass Lowell': 'UMass-Lowell',
     'UMES': 'Maryland Eastern Shore',
